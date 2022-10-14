@@ -11,10 +11,12 @@ public class CubeMover : MonoCached
     [Inject] private Messager msg;
 
     private MoveInfo info;
-    private float spawnInterval;
+    private float spawnInterval = 2;
 
     public override void Rise()
     {
+        info = new MoveInfo(10, 5);
+        
         msg.Subscribe(Message.SET_INTERVAL, x => SetSpawnInterval((float) x));
         msg.Subscribe(Message.SET_DISTANCE, x => SetDistance((float)x));
         msg.Subscribe(Message.SET_SPEED, x => SetSpeed((float)x));
@@ -52,4 +54,10 @@ public struct MoveInfo
 {
     public float distance;
     public float speed;
+
+    public MoveInfo(float inDistance, float inSpeed)
+    {
+        distance = inDistance;
+        speed = inSpeed;
+    }
 }

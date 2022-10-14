@@ -1,18 +1,36 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using VolumeBox.Toolbox;
 
-public class FieldValidator : MonoBehaviour
+[RequireComponent(typeof(TMP_InputField))]
+public class FieldValidator : MonoCached
 {
-    // Start is called before the first frame update
-    void Start()
+    //TODO: add support for string and decimal types
+    [SerializeField] private float minValue;
+    [SerializeField] private float maxValue;
+    private TMP_InputField field;
+
+    public override void Rise()
     {
-        
+        field = GetComponent<TMP_InputField>();
+        field.onValueChanged.AddListener(Validate);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Validate(string text)
     {
-        
-    }
+        float val;
+        if (float.TryParse(text, out val))
+        {
+            val = Mathf.Clamp(val, minValue, maxValue);
+            field.text = val.ToString();
+        }
+        else
+        {
+            field.text = minValue.ToString();
+        }
+    }    
 }
+
